@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        S3_BUCKET_NAME = "your-s3-bucket-name"  // Replace with your S3 bucket name
+        S3_BUCKET_NAME = "dev.shan-infra"  // Replace with your S3 bucket name
     }
 
     stages {
@@ -10,6 +10,9 @@ pipeline {
             steps {
                 script {
                     // Install and configure AWS CLI (if not already configured)
+                    withCredentials"([<object of type com.cloudbees.jenkins.plugins.awscredentials.AmazonWebServicesCredentialsBinding>])" {
+    
+}
                     sh "aws configure set aws_access_key_id YOUR_ACCESS_KEY"
                     sh "aws configure set aws_secret_access_key YOUR_SECRET_KEY"
                     sh "aws configure set default.region YOUR_REGION"
