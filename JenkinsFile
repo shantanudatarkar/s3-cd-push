@@ -10,7 +10,7 @@ pipeline {
             steps {
                 script {
                     // Install and configure AWS CLI (if not already configured)
-                    withCredentials"([<object of type com.cloudbees.jenkins.plugins.awscredentials.AmazonWebServicesCredentialsBinding>])" {
+                    withCredentials'([<object of type com.cloudbees.jenkins.plugins.awscredentials.AmazonWebServicesCredentialsBinding>])' {
     
 }
                     sh "aws configure set aws_access_key_id YOUR_ACCESS_KEY"
