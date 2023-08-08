@@ -6,14 +6,6 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
-            steps {
-                // You can include any build steps here, if required.
-                // For the sample HTML page, there is no build step needed.
-                // If you have no build steps, you can leave this stage empty.
-            }
-        }
-
         stage('Deploy to S3') {
             steps {
                 script {
