@@ -1,23 +1,60 @@
 pipeline {
     agent any
 
-    environment {
-        S3_BUCKET_NAME = "dev.shan-infra"  // Replace with your S3 bucket name
-    }
-
     stages {
-        stage('Deploy to S3') {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Build your code here
+            }
+        }
+
+        stage('Deploy to Dev') {
+            when {
+                expression { BRANCH_NAME == 'dev' }
+            }
+            environment {
+                S3_BUCKET_NAME = "dev.shan-infra" // Replace with your dev S3 bucket name
+            }
             steps {
                 script {
-                    // Install and configure AWS CLI (if not already configured)
-                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY', secretKeyVariable: 'AWS_SECRET_KEY', credentialsId: 'bf919574-3e19-45d2-b7a5-d3bd3bdf643e']]) {
-                        sh "aws configure set aws_access_key_id $AWS_ACCESS_KEY"
-                        sh "aws configure set aws_secret_access_key $AWS_SECRET_KEY"
-                        sh "aws configure set default.region us-east-1" // Set your S3 bucket region here
+                    // Add deployment steps for the dev environment
+                    sh "aws s3 cp index.html s3://${S3_BUCKET_NAME}/index.html"
+                }
+            }
+        }
 
-                        // Copy index.html to S3 bucket
-                        sh "aws s3 cp index.html s3://${S3_BUCKET_NAME}/index.html"
-                    }
+        stage('Deploy to UAT') {
+            when {
+                expression { BRANCH_NAME == 'uat' }
+            }
+            environment {
+                S3_BUCKET_NAME = "uat.shan-infra" // Replace with your UAT S3 bucket name
+            }
+            steps {
+                script {
+                    // Add deployment steps for the UAT environment
+                    sh "aws s3 cp index.html s3://${S3_BUCKET_NAME}/index.html"
+                }
+            }
+        }
+
+        stage('Deploy to Prod') {
+            when {
+                expression { BRANCH_NAME == 'prod' }
+            }
+            environment {
+                S3_BUCKET_NAME = "prod.shan-infra" // Replace with your prod S3 bucket name
+            }
+            steps {
+                script {
+                    // Add deployment steps for the prod environment
+                    sh "aws s3 cp index.html s3://${S3_BUCKET_NAME}/index.html"
                 }
             }
         }
