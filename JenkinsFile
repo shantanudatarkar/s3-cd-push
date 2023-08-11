@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Deploy to UAT') {
             environment {
-                S3_BUCKET_NAME = "uat.shan-infra" // Replace with your UAT S3 bucket name
+                S3_BUCKET_NAME = "uat-shan-infra" // Replace with your UAT S3 bucket name
             }
             steps {
                 script {
