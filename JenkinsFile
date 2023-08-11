@@ -2,16 +2,47 @@ pipeline {
     agent any
 
     stages {
-        stage('Deploy to Dev') {
-            environment {
-                S3_BUCKET_NAME = "dev-shan-infra" // Replace with your dev S3 bucket name
+        stage('Checkout') {
+            steps {
+                checkout scm
             }
+        }
+
+        stage('Deploy to All Environments') {
             steps {
                 script {
-                    // Add deployment steps for the dev environment
-                    sh "aws s3 cp index.html s3://${S3_BUCKET_NAME}/index.html"
+                    // Define environment-specific settings
+                    def environments = ['dev', 'uat', 'prod']
+
+                    // Loop through each environment and perform deployment
+                    for (def env in environments) {
+                        echo "Deploying to ${env} environment"
+                        deployToEnvironment(env)
+                    }
                 }
             }
         }
     }
+}
+
+// Define a function to deploy to a specific environment
+def deployToEnvironment(environment) {
+    def s3BucketName
+
+    switch (environment) {
+        case 'dev':
+            s3BucketName = "dev-shan-infra"
+            break
+        case 'uat':
+            s3BucketName = "uat-shan-infra"
+            break
+        case 'prod':
+            s3BucketName = "prod-shan-infra"
+            break
+        default:
+            echo "Unsupported environment: ${environment}"
+            return
+    }
+
+    sh "aws s3 cp index.html s3://${s3BucketName}/index.html"
 }
