@@ -8,18 +8,12 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            steps {
-                // Build your code here
-            }
-        }
-
         stage('Deploy to Dev') {
             when {
                 expression { BRANCH_NAME == 'dev' }
             }
             environment {
-                S3_BUCKET_NAME = "dev.shan-infra" // Replace with your dev S3 bucket name
+                S3_BUCKET_NAME = "dev-shan-infra" // Replace with your dev S3 bucket name
             }
             steps {
                 script {
@@ -34,7 +28,7 @@ pipeline {
                 expression { BRANCH_NAME == 'uat' }
             }
             environment {
-                S3_BUCKET_NAME = "uat.shan-infra" // Replace with your UAT S3 bucket name
+                S3_BUCKET_NAME = "uat-shan-infra" // Replace with your UAT S3 bucket name
             }
             steps {
                 script {
@@ -49,7 +43,7 @@ pipeline {
                 expression { BRANCH_NAME == 'prod' }
             }
             environment {
-                S3_BUCKET_NAME = "prod.shan-infra" // Replace with your prod S3 bucket name
+                S3_BUCKET_NAME = "prod-shan-infra" // Replace with your prod S3 bucket name
             }
             steps {
                 script {
