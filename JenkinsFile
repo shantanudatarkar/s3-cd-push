@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     stages {
-        stage('Deploy to UAT') {
+        stage('Deploy to Prod') {
             environment {
-                S3_BUCKET_NAME = "uat.shan-infra" // Replace with your UAT S3 bucket name
+                S3_BUCKET_NAME = "prod-shan-infra" // Replace with your prod S3 bucket name
             }
             steps {
                 script {
-                    // Add deployment steps for the UAT environment
+                    // Add deployment steps for the prod environment
                     sh "aws s3 cp index.html s3://${S3_BUCKET_NAME}/index.html"
                 }
             }
